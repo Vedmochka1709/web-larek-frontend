@@ -26,7 +26,7 @@ export class EventEmitter implements IEvents {
     }
 
     /**
-     * Установить обработчик на событие
+     * Установить обработчик на событие - заменяет addEventListener !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     on<T extends object>(eventName: EventName, callback: (event: T) => void) {
         if (!this._events.has(eventName)) {
@@ -48,7 +48,7 @@ export class EventEmitter implements IEvents {
     }
 
     /**
-     * Инициировать событие с данными
+     * Инициировать событие с данными - заменяет колбэк в addEventListener !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     emit<T extends object>(eventName: string, data?: T) {
         this._events.forEach((subscribers, name) => {

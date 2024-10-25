@@ -5,7 +5,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#000000" />
 	<link rel="icon" href="/favicon.ico" />
-	<link rel="manifest" href="/manifest.json" />
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -94,7 +93,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="modal">
 		<div class="modal__container">
 			<button class="modal__close" aria-label="закрыть"></button>
@@ -114,7 +113,7 @@
 						</label>
 					</div>
 					<div class="modal__actions">
-						<button disabled class="button">Далее</button>
+						<button disabled class="button form_button">Далее</button>
 					</div>
 				</form>
 			</div>
@@ -137,7 +136,7 @@
 						</label>
 					</div>
 					<div class="modal__actions">
-						<button disabled class="button">Оплатить</button>
+						<button disabled class="button form_button">Оплатить</button>
 					</div>
 				</form>
 			</div>
@@ -182,7 +181,7 @@
 				<h2 class="card__title">Бэкенд-антистресс</h2>
 				<p class="card__text">Если планируете решать задачи в тренажёре, берите два.</p>
 				<div class="card__row">
-					<button class="button card__button">В корзину</button>
+					<button class="button card__button card-preview_button">В корзину</button>
 					<span class="card__price">1000 синапсов</span>
 				</div>
 			</div>
@@ -215,36 +214,36 @@
 				<div class="order__field">
 					<h2 class="modal__title">Способ оплаты</h2>
 					<div class="order__buttons">
-						<button name="card" type="button" class="button button_alt">Онлайн</button>
-						<button name="cash" type="button" class="button button_alt">При получении</button>
+						<button name="card" type="button" class="button button_alt button_online">Онлайн</button>
+						<button name="cash" type="button" class="button button_alt button_offline">При получении</button>
 					</div>
 				</div>
 				<label class="order__field">
 					<span class="form__label modal__title">Адрес доставки</span>
-					<input name="address" class="form__input" type="text" placeholder="Введите адрес" />
+					<input name="address" class="form__input address" type="text" placeholder="Введите адрес" />
 				</label>
 			</div>
 			<div class="modal__actions">
-				<button type="submit" disabled class="button order__button">Далее</button>
+				<button type="submit" disabled class="button order__button next_button">Далее</button>
 				<span class="form__errors"></span>
 			</div>
 		</form>
 	</template>
-
+	
 	<template id="contacts">
 		<form class="form" name="contacts">
 			<div class="order">
 				<label class="order__field">
 					<span class="form__label modal__title">Email</span>
-					<input name="email" class="form__input" type="text" placeholder="Введите Email" />
+					<input name="email" class="form__input email" type="text" placeholder="Введите Email" />
 				</label>
 				<label class="order__field">
 					<span class="form__label modal__title">Телефон</span>
-					<input name="phone" class="form__input" type="text" placeholder="+7 (" />
+					<input name="phone" class="form__input phone" type="text" placeholder="+7 (" />
 				</label>
 			</div>
 			<div class="modal__actions">
-				<button type="submit" disabled class="button">Оплатить</button>
+				<button type="submit" disabled class="button pay_button">Оплатить</button>
 				<span class="form__errors"></span>
 			</div>
 		</form>
