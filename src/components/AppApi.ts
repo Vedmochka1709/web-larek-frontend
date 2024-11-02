@@ -1,5 +1,5 @@
-import { IApi, ICard } from "../types"
-import { Api, ApiListResponse } from "./base/api"
+import { ApiListResponse, IApi, ICard } from "../types"
+import { Api } from "./base/api"
 
 export class AppApi {
     private _baseApi: IApi
@@ -9,24 +9,14 @@ export class AppApi {
     }
 
     // Получение массива карточек с сервера
-
     getCards(): Promise<ICard[]> {
         return this._baseApi.get(`/product/`)
-            .then((data: ApiListResponse<ICard>) => 
-                data.map(x => x.items))
+            .then((data: ApiListResponse) =>
+                data.items.map(item => ({
+                    ...item
+                })))
     }
 
-    /*getCards(): Promise<ICard[]> {
-        return this._baseApi.get(`/product/`).then((data: ApiListResponse<ICard>) => data)
-    }
-    /*
-.then ((data) => {
-        console.log(data)
-        const result = data.map(x => x.items)
-        cardData.cards = result
-       
-        console.log(cardData.getCard("854cef69-976d-4c2a-a18c-2aa45046c390"))
-    */
 
     // TODO: Отправка выбранной карточки в корзину addCardBasket(cardId: string):Promise<ICard[]> {return this._baseApi.post<ICard[]>(`/order`, data, 'PATCH').then((res: ICard[]) => res)}
     // TODO: Получение массива выбранных карточек getCardBasket():Promise<ICard[]> {return this._baseApi.get<ICard[]>(`/order`).then((items: ICard[]) => items)}

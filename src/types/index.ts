@@ -17,24 +17,43 @@ export interface IOrder {                 // возвращается {
 }
 
 export interface ICardData {
-    cards: ICard[],
-    preview: string | null   // для id конкретной карточки, чтобы её открыть
-    addCardBasket(cardId:string, fn: Function|null): void,
-    deleteCardBasket(cardId:string, fn: Function|null): void,
+    cards: ICard[],  
+    setSelectedCard(cardId:string): void,
+    getSelectedCard(): void,
     getCard(cardId:string): ICard
 }
 
+export interface IBasketData {
+    cardsBasket: ICard[],
+    total: number,
+    contains(id: string): boolean,
+    add(card: ICard): void,
+    remove(id: string): void,
+    getBasketList(): void,
+    getLengthBasketList():number,
+    getIdBasketList(): string[],
+    clear(): void
+}
+
 export interface IOrderData {
-    items: ICard[],
-    getLengthOrder(items:ICard[]) : number,
-    getSumOrder(items:ICard[]) : number,
-    /*checkValidation (): boolean, // TODO: что в аргументах*/
+
 }
 
 export interface IApi {
     baseUrl: string;
     get<T>(uri: string): Promise<T>
     post<T>(uri: string, data: object, method?: ApiPostMethods):Promise<T>
+}
+
+export type ApiListResponse = {
+    total: number,
+    items: ICard[]
+};
+
+export interface IPage {
+    gallery: HTMLElement[]
+    counterBasket: number
+    blockPageScroll (): boolean
 }
 
 //Pick<> - даёт возможность использовать часть типов

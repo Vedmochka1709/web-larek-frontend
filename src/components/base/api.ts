@@ -1,9 +1,9 @@
 import { ApiPostMethods, IApi } from "../../types";
 
-export type ApiListResponse<Type> = {
+/*export type ApiListResponse<Type> = {
     total: number,
     items: Type[]
-};
+};*/
 
 export class Api implements IApi{
     readonly baseUrl: string;

@@ -1,40 +1,38 @@
-/*import { ensureElement } from "../../utils/utils";
+import { IPage } from "../../types";
+import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/component";
-import { EventEmitter } from "../base/events";
+import { IEvents } from "../base/events";
 
-interface iPage {
-    gallary: HTMLElement[],
-    counterBasket: number,
-    iconBasket: HTMLElement
-}
+export class Page extends Component<IPage> {
+    protected pageContainer: HTMLElement
+    protected _galleryContainer: HTMLElement
+    protected _counterBasket: HTMLElement;
+    protected _iconButtonBasket: HTMLButtonElement
 
-export class CardsContainer extends Component<iPage> {
-    protected gallaryContainer: HTMLElement;
-  //  protected countBasket: HTMLElement;
-   // protected iconButtonBasket: HTMLButtonElement
-
-    constructor (container: HTMLElement) {
+    constructor(protected container: HTMLElement, protected events: IEvents) {
         super(container)
+        this.events = events
 
-       // this.countBasket = ensureElement('.header__basket-counter', this.container);
-        this.gallaryContainer = ensureElement('.gallery', this.container);
-       // this.iconButtonBasket = ensureElement('.header__basket', this.container)  as HTMLButtonElement; 
+        this.pageContainer = ensureElement('.page__wrapper', this.container);
+        this._galleryContainer = ensureElement('.gallery', this.container);
+        this._counterBasket = ensureElement('.header__basket-counter', this.container);
+        this._iconButtonBasket = ensureElement('.header__basket', this.container) as HTMLButtonElement;
 
-       /* this.iconButtonBasket.addEventListener('click', () => this.events.emit('icon:click', this.)) - надо ли?*/ 
-    /*}
-
-    // Заполение контентом
-    getCards(cardElement: HTMLElement) {
-        
+        this._iconButtonBasket.addEventListener('click', () => this.events.emit('basket:open'))
+    }
+    
+    // Отображение счётчика на иконке корзины
+    set counterBasket(value: number) {
+        this.setText(this._counterBasket, value)
+    }
+    
+    // Получаем карточки
+    set gallery (cards: HTMLElement[]) {
+        this._galleryContainer.replaceChildren(...cards)
     }
 
-    /*//* Отображение счётчика на иконке корзины
-    set counterBasket(value:number) {
-        this.setText(this.countBasket, value)
-    }
-    // Получение данных счётчика на иконке корзины
-    get counterBasket() {
-        return Number(this.countBasket.textContent)
+    // Снятие скролла при открытии модального окна
+    blockPageScroll (value: boolean) {
+        this.toggleClass(this.pageContainer, 'page__wrapper_locked', value);
     }
 }
-*/
