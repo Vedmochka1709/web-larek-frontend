@@ -5,6 +5,12 @@ export interface ICard {
     title: string,
     category: string,
     price: number
+    index?: number
+}
+
+export interface IBasket {
+    items: HTMLElement[]
+    total: number
 }
 
 export interface IOrder {                 // возвращается {
@@ -60,7 +66,7 @@ export interface IPage {
 
 export type TCatalogCard = Pick<ICard, 'id'|'category'|'image'|'title'|'price'>
 
-export type TBasket = Pick<IOrder, 'items'|'total'>
+export type TBasketCard = Pick<ICard & {index: number}, 'index'|'id'|'price'|'title'>
 
 export type TPayment = Pick<IOrder, 'payment'|'address'>
 

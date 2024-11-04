@@ -4,10 +4,6 @@ import { cloneTemplate, createElement, ensureElement } from "../../utils/utils";
 import { Component } from "../base/component";
 import { IEvents } from "../base/events";
 
-interface ICardActions {
-    onClick: (event: MouseEvent) => void;
-}
-
 export class Card extends Component<ICard> {
 
     protected cardElement: HTMLElement;
@@ -33,40 +29,22 @@ export class Card extends Component<ICard> {
         this._description = this.cardElement.querySelector('.card__text')
         this._index = this.cardElement.querySelector('.basket__item-index')
         this.cardButton = this.cardElement.querySelector('.card__button') // Кнопка в корзину и кнопка удалить
-       
 
         if (this.cardElement.classList.contains('gallery__item')) {
             this.cardElement.addEventListener('click', () => {
-                this.events.emit('modalPreview:open', {cardId: this._id})
+                this.events.emit('modalPreview:open', { cardId: this._id })
             })
         }
 
-      /*  if (this.cardButton) {
-            if (!this.cardElement.classList.contains('selected') && this._description) {
-                this.setText(this.cardButton, 'В корзину')
-            } else if (this.cardElement.classList.contains('selected') && this._description) {
-                this.setText(this.cardButton, 'Удалить из корзины')
-            } 
-        }*/
-
         if (this.cardButton) {
-            this.cardButton.addEventListener('click', (event) => {
-                event.preventDefault()
-                if (!this.cardElement.classList.contains('selected') && this._description) {
-                    this.cardElement.classList.add('selected')
-                    this.setText(this.cardButton, 'Удалить из корзины')
-                } else if (this.cardElement.classList.contains('selected') && this._description) {
-                    this.cardElement.classList.remove('selected')
-                    this.setText(this.cardButton, 'В корзину')
-                } else if (this.cardElement.classList.contains('selected') && !this._description) {
-                    this.cardElement.classList.remove('selected')
+            this.cardButton.addEventListener('click', () => {
+                if (this.cardButton && this._description) {   // Кнопка в модальном окне
+                    this.events.emit('modalPreview:submit', { cardId: this._id }) 
+                } else if (this.cardButton && !this._description) {  // Кнопка удалить в корзине
+                    this.events.emit('basketCard: delete',{ cardId: this._id }) 
                 }
             })
         }
-
-    }
-    set selected (value: boolean) {
-
     }
 
     set id(id: string) {
@@ -80,6 +58,9 @@ export class Card extends Component<ICard> {
     set price(price: number) {
         if (price === null) {
             this._price.textContent = 'Бесценно'
+            if (this.cardButton) {
+                this.cardButton.disabled = true
+            }
         } else {
             this._price.textContent = `${price.toString()} синапсов`
         }
@@ -112,10 +93,20 @@ export class Card extends Component<ICard> {
         this.setText(this._index, value);
     }
 
+    // Смена текста кнопки
+    changeTextButton(value: boolean) {
+        if (value) {
+            this.setText(this.cardButton, 'Удалить из корзины')
+        } else {
+            this.setText(this.cardButton, 'В корзину')
+        }
+    }
+
     // возвращает полностью заполненную карточку с установленными слушателями
     render(cardData: Partial<ICard>): HTMLElement {
         const { ...obj } = cardData
         Object.assign(this, obj)
         return this.cardElement
     }
+
 }

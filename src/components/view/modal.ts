@@ -32,15 +32,13 @@ export class Modal extends Component<IModal> {
 
     openModal() {
         this.container.classList.add('modal_active');
-        document.addEventListener('keyup', this.closeEsc);
-        this.events.emit('modal:open');  
+        document.addEventListener('keyup', this.closeEsc); 
     }
 
     closeModal() {
         this.container.classList.remove('modal_active');
         this.modalContent = null;
         document.removeEventListener('keyup', this.closeEsc);
-        this.events.emit('modal:close'); 
     }
 
     protected closeEsc(evt: KeyboardEvent) {

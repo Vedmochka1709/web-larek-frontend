@@ -1,4 +1,4 @@
-import { IBasketData, ICard } from "../../types";
+import { IBasketData, ICard, TBasketCard } from "../../types";
 import { IEvents } from "../base/events";
 
 export class BasketData implements IBasketData {
@@ -38,8 +38,8 @@ export class BasketData implements IBasketData {
         }
     }
 
-    // Нумеруем карточки
-    getBasketList() {
+    // Получаем список в корзине Нумеруем карточки
+    getBasketList(): TBasketCard[] {
         return this._cardsBasket.map((item, index) => {
             return {
                 id: item.id,

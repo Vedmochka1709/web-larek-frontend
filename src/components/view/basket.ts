@@ -1,44 +1,55 @@
-import { ensureElement } from "../../utils/utils";
+import { IBasket } from "../../types";
+import { cloneTemplate, ensureElement } from "../../utils/utils";
 import { Component } from "../base/component";
 import { IEvents } from "../base/events";
 
-/*<h2 class="modal__title">Корзина</h2>
-					<ul class="basket__list">
-                    <button class="button">Оформить</button>
-						<span class="basket__price">153 250 синапсов</span>*/
-interface IBasket {
-    items: HTMLElement
-    total: number
-}
-
 export class Basket extends Component<IBasket> {
- 
-    protected titleBusket: HTMLElement
+
+    protected basketElement: HTMLElement;
     protected basketListConteiner: HTMLElement;
     protected basketOrderButton: HTMLButtonElement;
     protected totalSum: HTMLElement;
+    protected basketItemIndex: HTMLSpanElement;
 
-    constructor(protected container: HTMLElement, protected events: IEvents) {
-        super(container, events);
-        this.events = events
+    constructor(protected template: HTMLTemplateElement, protected events: IEvents) {
+        super(template);
 
-        this.basketListConteiner = ensureElement('.basket__list', this.container);
-        this.basketOrderButton = ensureElement('.basket__button', this.container) as HTMLButtonElement;
-        this.totalSum = ensureElement('.basket__price', this.container);
+        this.basketElement = cloneTemplate(template)
+
+        this.basketListConteiner = ensureElement('.basket__list', this.basketElement);
+        this.basketOrderButton = ensureElement('.basket__button', this.basketElement) as HTMLButtonElement;
+        this.totalSum = ensureElement('.basket__price', this.basketElement);
+        this.basketItemIndex = this.basketElement.querySelector('.basket__item-index');
 
         this.basketOrderButton.addEventListener('click', () => {
-            this.events.emit('basket:close') 
-            this.events.emit('Order:open') 
+            this.events.emit('basket:submit') // при этом закрывается корзина и открывается окно order
         });
+
     }
-/*checkValidation (): boolean  // TODO: проверяет форму на валидность    */
+
+
     // Получение общей суммы
     set total(value: number) {
-        this.setText(this.totalSum, value)
+        if (value) {
+            this.setText(this.totalSum, `${value} синапсов`)
+            this.basketOrderButton.disabled = false
+        } else {
+            this.setText(this.totalSum, `0 синапсов`)
+            this.basketOrderButton.disabled = true
+        }
+        this.events.emit('basket:submit')
     }
 
     // Заполнение контентом
-    set items(items:HTMLElement[]) {
-        this.basketListConteiner.replaceChildren(...items)
+    set items(cards: HTMLElement[]) {
+        this.basketListConteiner.replaceChildren(...cards)
     }
+
+    render(data?: IBasket): HTMLElement {
+        Object.assign(this as object, data ?? {});
+        return this.basketElement;
+    }
+
+
+    /*checkValidation (): boolean  // TODO: проверяет форму на валидность    */
 }
