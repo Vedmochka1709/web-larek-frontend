@@ -7,6 +7,39 @@ export class Payment extends Form<IForm> {
    
     protected buttonPayment: HTMLButtonElement[]
     protected addressDelivery: HTMLInputElement;
+    
+
+    constructor(protected container: HTMLTemplateElement, protected events: IEvents) {
+        super(container, events);
+
+        this.buttonPayment = ensureAllElements('button[type=button]', this.container);
+        this.addressDelivery = ensureElement('.address', this.container) as HTMLInputElement;
+
+        this.buttonPayment?.forEach(button => {
+            button.addEventListener('click', (evt) => {
+                const currenButton = evt.target as HTMLButtonElement
+                this.payment = currenButton.name
+                
+                this.events.emit('form:change', { field: 'payment', value: button.name })
+            })
+        })
+    }
+    
+    set payment(name: string) { // передаём название кнопки для выделения
+        this.buttonPayment.forEach(button => {
+            this.toggleClass(button, 'button_alt-active', button.name === name)
+        });
+    }
+
+    set address(value: string) {
+        this.setText(this.addressDelivery, value)
+    }
+}
+
+/*export class Payment extends Form<IForm> {
+   
+    protected buttonPayment: HTMLButtonElement[]
+    protected addressDelivery: HTMLInputElement;
     protected paymentElement: HTMLElement
 
     constructor(protected form: HTMLTemplateElement, protected events: IEvents) {
@@ -40,5 +73,4 @@ export class Payment extends Form<IForm> {
         Object.assign(this as object, data)
         return  this.paymentElement
     }
-}
-
+} */

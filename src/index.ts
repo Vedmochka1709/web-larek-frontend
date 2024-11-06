@@ -6,14 +6,14 @@ import { CardData } from './components/model/CardData';
 import { OrderData } from './components/model/OrderData';
 import { Basket } from './components/view/Basket';
 import { Card } from './components/view/Card';
-import { Contacts } from './components/view/contacts';
+import { Contacts } from './components/view/Contacts';
 import { Modal } from './components/view/Modal';
 import { Page } from './components/view/Page';
 import { Payment } from './components/view/Payment';
 import './scss/styles.scss';
 import { IApi, IOrder } from './types/index';
 import { API_URL, settings } from './utils/constants';
-import { ensureElement } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 
 // Находим темплейты
 const templateCardCatalog = ensureElement<HTMLTemplateElement>('#card-catalog')
@@ -43,8 +43,8 @@ const card = new Card(templateCardCatalog, events); // дубль удалить
 const page = new Page(pageContainer, events)
 const modal = new Modal(modalContainer, events)
 const basket = new Basket(templateBasket, events)
-const paymentOrder = new Payment(templatePayment, events)
-const contacts = new Contacts(templateContacts, events)
+const paymentOrder = new Payment(cloneTemplate(templatePayment), events)
+const contacts = new Contacts(cloneTemplate(templateContacts), events)
 
 events.onAll((event) => {
     console.log(event.eventName, event.data);
@@ -219,7 +219,7 @@ events.on('order:changed', () => {
 
 // Вывод ошибок
 function getErrorMessage(errors: Partial<IOrder>): string {
-    return Object.values(errors).filter(i => !!i).join('; ');
+    return Object.values(errors).filter(i => !!i).join(' и ');
 }
 
 

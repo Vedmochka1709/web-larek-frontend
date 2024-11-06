@@ -6,6 +6,30 @@ import { Form } from "./Form";
 export class Contacts extends Form<IForm> {
     protected emailUser: HTMLInputElement 
     protected phoneUser: HTMLInputElement
+
+    constructor (protected container: HTMLTemplateElement, protected events: IEvents) {
+        super(container, events)
+
+        this.emailUser = ensureElement('.email', this.container) as HTMLInputElement;
+        this.phoneUser = ensureElement('.phone', this.container) as HTMLInputElement;
+    }
+
+    // Сеттер для отображения почты
+    set email(value: string) {
+        this.setText(this.emailUser, value)
+    }
+
+    // Сеттер для отображения Адреса
+    set phone(value: string) {
+        this.setText(this.phoneUser, value)
+    }
+}
+
+
+/*
+export class Contacts extends Form<IForm> {
+    protected emailUser: HTMLInputElement 
+    protected phoneUser: HTMLInputElement
     protected contactsElement: HTMLElement
 
     constructor (protected form: HTMLTemplateElement, protected events: IEvents) {
@@ -32,4 +56,4 @@ export class Contacts extends Form<IForm> {
         Object.assign(this as object, data)
         return  this.contactsElement
     }
-}
+} */
