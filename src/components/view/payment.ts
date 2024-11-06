@@ -1,45 +1,44 @@
-/*import { iOrder } from "../../types";
-import { ensureElement } from "../../utils/utils";
-import { Component } from "../base/component";
+import { IForm } from "../../types";
+import { cloneTemplate, ensureAllElements, ensureElement } from "../../utils/utils";
+import { IEvents } from "../base/events";
+import { Form } from "./Form";
 
-export class Form extends Component<iOrder> {
-    protected buttonOnline: HTMLButtonElement
-    protected buttonOffline: HTMLButtonElement
-    protected addressDelivery: HTMLElement
-    protected nextButton: HTMLButtonElement
+export class Payment extends Form<IForm> {
+   
+    protected buttonPayment: HTMLButtonElement[]
+    protected addressDelivery: HTMLInputElement;
+    protected paymentElement: HTMLElement
 
-    constructor(protected container: HTMLElement) {
-        super(container);
-        this.buttonOnline = ensureElement('.button_online', this.container) as HTMLButtonElement;
-        this.buttonOffline = ensureElement('.button_offline', this.container) as HTMLButtonElement;
-        this.addressDelivery = ensureElement('.address', this.container);
-        this.nextButton = ensureElement('.next_button', this.container) as HTMLButtonElement;
+    constructor(protected form: HTMLTemplateElement, protected events: IEvents) {
+        super(form, events);
+        
+        this.paymentElement = cloneTemplate(form)
 
-        //слушатели
+        this.buttonPayment = ensureAllElements('button[type=button]', this.paymentElement);
+        this.addressDelivery = ensureElement('.address', this.paymentElement) as HTMLInputElement;
+
+        this.buttonPayment?.forEach(button => {
+            button.addEventListener('click', () => {
+                this.events.emit('form:change', { field: 'payment', value: button.name })
+                // TODO: сделать выделение кнопки
+            })
+        })
+    }
+    
+    set payment(name: string) { // передаём название кнопки
+        this.buttonPayment.forEach(button => {
+            this.toggleClass(button, 'button_alt-active', button.name === name)
+        });
     }
 
-    // Сеттер для отображения адреса
     set address(value: string) {
         this.setText(this.addressDelivery, value)
     }
 
-    // Изменение отображение кнопки далее. Если true - остаётся заблокированным, если false - снимается disabled
-    set disabled(state: boolean) {
-        this.setDisabled(this.nextButton, state)
-    }
-
-    /* // Изменение стилей кнопок
-     set selected (value: string) {
-         this.toggleClass(this._buttonOnline, класс, когда кнопка выбрана, value)
-         this.toggleClass(this._buttonOffline, класс, когда кнопка невыбрана, value)
-         this.toggleClass(this._buttonOnline, класс, когда кнопка невыбрана, !value)
-         this.toggleClass(this._buttonOffline, класс, когда кнопка выбрана, !value)
-     }*/
-
-    // ----
-    /*render(data: Partial<iOrder>): HTMLElement {
+    // Возвращаем DOM- элемент
+    render(data: Partial<IForm>): HTMLElement {
         Object.assign(this as object, data)
-        return this.container
+        return  this.paymentElement
     }
-}*/
+}
 

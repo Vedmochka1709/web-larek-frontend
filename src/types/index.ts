@@ -17,9 +17,12 @@ export interface IOrder {                 // возвращается {
     payment: string,                      // "id": "28c57cb4-3002-4445-8aa1-2a06a5055ae5",
     email: string,                        //  "total": 2200}
     phone: string,
-    address: string,
-    total: number,
-    items: ICard[]
+    address: string
+}
+
+export interface IForm extends IOrder {
+    error: string;
+    valid: boolean;
 }
 
 export interface ICardData {
@@ -42,7 +45,10 @@ export interface IBasketData {
 }
 
 export interface IOrderData {
-
+    getOrder(): IOrder;
+    setField(field: keyof IOrder, value: string): void;
+    setErrors(): Partial<IOrder>;
+    clear(): void;
 }
 
 export interface IApi {
@@ -68,10 +74,12 @@ export type TCatalogCard = Pick<ICard, 'id'|'category'|'image'|'title'|'price'>
 
 export type TBasketCard = Pick<ICard & {index: number}, 'index'|'id'|'price'|'title'>
 
+export type TOrderError = Partial<Pick<IOrder, 'address' | 'email' | 'payment' | 'phone'>>
+
 export type TPayment = Pick<IOrder, 'payment'|'address'>
 
 export type TProfileBuyer = Pick<IOrder, 'email'|'phone'>
 
-export type TSuccess = Pick<IOrder, 'total'>
+export type TSuccess = Pick<IBasket, 'total'>
 
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';

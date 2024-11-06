@@ -6,26 +6,28 @@ import { CardData } from './components/model/CardData';
 import { OrderData } from './components/model/OrderData';
 import { Basket } from './components/view/Basket';
 import { Card } from './components/view/Card';
+import { Contacts } from './components/view/contacts';
 import { Modal } from './components/view/Modal';
 import { Page } from './components/view/Page';
+import { Payment } from './components/view/Payment';
 import './scss/styles.scss';
-import { IApi, ICard, IOrder, TCatalogCard } from './types/index';
+import { IApi, IOrder } from './types/index';
 import { API_URL, settings } from './utils/constants';
 import { ensureElement } from './utils/utils';
 
-// Находим тимплейты
+// Находим темплейты
 const templateCardCatalog = ensureElement<HTMLTemplateElement>('#card-catalog')
 const templateCardPreview = ensureElement<HTMLTemplateElement>('#card-preview')
 const templateCardBasket = ensureElement<HTMLTemplateElement>('#card-basket')
 
 const templateBasket = ensureElement<HTMLTemplateElement>('#basket')
-const templateOrder = ensureElement<HTMLTemplateElement>('#order')
+const templatePayment = ensureElement<HTMLTemplateElement>('#order')
 const templateContacts = ensureElement<HTMLTemplateElement>('#contacts')
 const templateSuccess = ensureElement<HTMLTemplateElement>('#success')
 
 // Находим контейнеры
 const pageContainer = ensureElement<HTMLElement>('.page')
-const galleryContainer = ensureElement<HTMLElement>('.gallery')
+const galleryContainer = ensureElement<HTMLElement>('.gallery')    // TODO:
 const modalContainer = ensureElement<HTMLElement>('#modal-container')
 
 // Создаём экземпляры классов
@@ -41,6 +43,8 @@ const card = new Card(templateCardCatalog, events); // дубль удалить
 const page = new Page(pageContainer, events)
 const modal = new Modal(modalContainer, events)
 const basket = new Basket(templateBasket, events)
+const paymentOrder = new Payment(templatePayment, events)
+const contacts = new Contacts(templateContacts, events)
 
 events.onAll((event) => {
     console.log(event.eventName, event.data);
@@ -61,14 +65,13 @@ api.getCards()
         })
     }).catch(console.error)
 
-// Открытие модального окна Preview
-events.on('modalPreview:open', (obj) => {
-    const cardId = Object.values(obj).toString()
-    const cardInBasket = basketData.contains(cardId) // возвращает true или false
-    const selectedCard = cardData.getCard(cardId)
+// Модального окно Preview
+events.on('modalPreview:open', (data: { cardId: string }) => {
+    const cardInBasket = basketData.contains(data.cardId) // возвращает true или false
+    const selectedCard = cardData.getCard(data.cardId)
     const cardPreview = new Card(templateCardPreview, events)
 
-    cardData.setCard(cardId)
+    cardData.setCard(data.cardId)
 
     if (!cardInBasket) {
         cardPreview.changeTextButton(false)
@@ -85,17 +88,16 @@ events.on('modalPreview:open', (obj) => {
     modal.openModal()
 })
 
-events.on('modalPreview:submit', (obj) => {
-    const cardId = Object.values(obj).toString()
-    const cardInBasket = basketData.contains(cardId) // возвращает true или false
-    const selectedCard = cardData.getCard(cardId)
+events.on('modalPreview:submit', (data: { cardId: string }) => {
+    const cardInBasket = basketData.contains(data.cardId) // возвращает true или false
+    const selectedCard = cardData.getCard(data.cardId)
     const cardPreview = new Card(templateCardPreview, events)
 
     if (!cardInBasket) {
         basketData.add(selectedCard)
         cardPreview.changeTextButton(true)
     } else {
-        basketData.remove(cardId)
+        basketData.remove(data.cardId)
         cardPreview.changeTextButton(false)
     }
 
@@ -107,7 +109,7 @@ events.on('modalPreview:submit', (obj) => {
 
 })
 
-// Открытие корзины
+// Корзина
 events.on('basket:open', () => {
     modal.render({
         modalContent: basket.render({
@@ -116,6 +118,7 @@ events.on('basket:open', () => {
                 const cardBasket = new Card(templateCardBasket, events)
 
                 return cardBasket.render({
+                    id: item.id,
                     index: item.index,
                     title: item.title,
                     price: item.price
@@ -134,52 +137,93 @@ events.on('basket:changed', () => {
             const cardBasket = new Card(templateCardBasket, events)
 
             return cardBasket.render({
+                id: item.id,
                 index: item.index,
                 title: item.title,
                 price: item.price
             })
         })
     })
-   /* basketData.cardsBasket.map((item) => {
-        console.log(basketData.cardsBasket)
-        events.on('basketCard: delete', () => {
-            basketData.remove(item.id)
-        })
-    })   */ 
 
     page.render({
         counterBasket: basketData.getLengthBasketList()
     });
 })
 
-events.on('basketCard: delete', () => {
-                    basketData.remove(item.id)
-                })
+events.on('basketCard: delete', (data: { cardId: string }) => {
+    basketData.remove(data.cardId)
+})
 
-/*events.on('basketCard: delete', (cardBasket) => {
-    console.log(cardBasket)
-    //basketData.remove(.id)
+// Модальное окно Payment - открытие
 
-    /*modal.render({
-        modalContent: basket.render({
-            total: basketData.total,
-            items: basketData.getBasketList().map((item) => {
-                const cardBasket = new Card(templateCardBasket, events)
-                return cardBasket.render({
-                    index: item.index,
-                    title: item.title,
-                    price: item.price
-                })
-            })
+events.on('basket:submit', () => {
+
+    const payment = orderData.setErrors().payment;
+    const address = orderData.setErrors().address;
+
+    modal.render({
+        modalContent: paymentOrder.render({
+            payment: orderData.getOrder().payment,
+            address: orderData.getOrder().address,
+            valid: !payment && !address,
+            error: getErrorMessage({ payment, address })
         })
-    });*//*
-})*/
+    })
+
+    modal.openModal()
+})
+
+// Модальное окно Contacts - открытие
+events.on('order:submit', () => {
+
+    const email = orderData.setErrors().email;
+    const phone = orderData.setErrors().phone;
+
+    modal.render({
+        modalContent: contacts.render({
+            email: orderData.getOrder().email,
+            phone: orderData.getOrder().phone,
+            valid: !email && !phone,
+            error: getErrorMessage({ email, phone })
+        })
+    })
+
+    modal.openModal()
+})
+
+// Настройка полей формы
+events.on('form:сhange', (data: { field: keyof IOrder, value: string }) => {
+    orderData.setField(data.field, data.value)
+})
+
+// Обновление форм
+events.on('order:changed', () => {
+    const payment = orderData.setErrors().payment;
+    const address = orderData.setErrors().address;
+    const email = orderData.setErrors().email;
+    const phone = orderData.setErrors().phone;
+
+    paymentOrder.render({
+        payment: orderData.getOrder().payment,
+        address: orderData.getOrder().address,
+        valid: !payment && !address,
+        error: getErrorMessage({ payment, address })
+    })
+    contacts.render({
+        email: orderData.getOrder().email,
+        phone: orderData.getOrder().phone,
+        valid: !email && !phone,
+        error: getErrorMessage({ email, phone })
+    })
+})
+
+// Вывод ошибок
+function getErrorMessage(errors: Partial<IOrder>): string {
+    return Object.values(errors).filter(i => !!i).join('; ');
+}
 
 
-
-
-
-
+// Закрепление модального окна
 
 events.on('modal:open', () => {
     page.blockPageScroll(true)
@@ -188,20 +232,3 @@ events.on('modal:open', () => {
 events.on('modal:close', () => {
     page.blockPageScroll(false)
 })
-
-//
-
-
-/*const root:HTMLElement = document.querySelector('.page')
-
-// Вывод счётчика на иконке корзины
-const counterBasketIcon = new Page(root)
-counterBasketIcon.render({
-    counterBasket: 0
-})
-//TODO: вывести изменение количестка при добавлении и удалении*/
-
-
-
-
-

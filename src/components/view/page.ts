@@ -11,7 +11,6 @@ export class Page extends Component<IPage> {
 
     constructor(protected container: HTMLElement, protected events: IEvents) {
         super(container)
-        this.events = events
 
         this.pageContainer = ensureElement('.page__wrapper', this.container);
         this._galleryContainer = ensureElement('.gallery', this.container);

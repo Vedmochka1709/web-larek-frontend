@@ -32,18 +32,21 @@ export class Modal extends Component<IModal> {
 
     openModal() {
         this.container.classList.add('modal_active');
-        document.addEventListener('keyup', this.closeEsc); 
+        document.addEventListener('keydown', this.closeEsc); 
+        this.events.emit('modal:open')
     }
 
     closeModal() {
         this.container.classList.remove('modal_active');
         this.modalContent = null;
-        document.removeEventListener('keyup', this.closeEsc);
+        document.removeEventListener('keydown', this.closeEsc);
+        this.events.emit('modal:close')
     }
 
-    protected closeEsc(evt: KeyboardEvent) {
-        if (evt.key === 'Escape')
-            this.closeModal();
+    protected closeEsc(evt: KeyboardEvent) {  // Не работает TODO:
+        if (evt.key === 'Escape') {
+            this.closeModal()
+        }   
     }
 
     render(data?: Partial<IModal>): HTMLElement {
