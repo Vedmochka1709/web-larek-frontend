@@ -192,7 +192,7 @@ events.on('order:submit', () => {
 })
 
 // Настройка полей формы
-events.on('form:сhange', (data: { field: keyof IOrder, value: string }) => {
+events.on('form:change', (data: { field: keyof IOrder, value: string }) => {
     orderData.setField(data.field, data.value)
 })
 

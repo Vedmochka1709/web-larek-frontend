@@ -18,7 +18,7 @@ export class Form<T> extends Component<T> {
             const currentElement = evt.target as HTMLInputElement;
                 const field = currentElement.name;
                 const value = currentElement.value;
-                this.events.emit('form:сhange', { field, value })
+                this.events.emit('form:change', { field, value })
         })
 
         this.container.addEventListener('submit', (evt) => {
