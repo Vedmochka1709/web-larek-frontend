@@ -1,7 +1,7 @@
 import { IForm, TPayment } from "../../types";
 import { ensureAllElements, ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
-import { Form } from "./Form";
+import { Form } from "./For";
 
 export class Payment extends Form<IForm> implements TPayment {
 

@@ -1,7 +1,7 @@
 import { IForm, TProfileBuyer, } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
-import { Form } from "./Form";
+import { Form } from "./For";
 
 export class Contacts extends Form<IForm> implements TProfileBuyer {
     protected emailUser: HTMLInputElement 
