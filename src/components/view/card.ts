@@ -1,6 +1,6 @@
 import { ICard } from "../../types";
 import { CDN_URL } from "../../utils/constants";
-import { cloneTemplate, createElement, ensureElement } from "../../utils/utils";
+import { cloneTemplate, ensureElement } from "../../utils/utils";
 import { Component } from "../base/component";
 import { IEvents } from "../base/events";
 
@@ -39,9 +39,9 @@ export class Card extends Component<ICard> {
         if (this.cardButton) {
             this.cardButton.addEventListener('click', () => {
                 if (this.cardButton && this._description) {   // Кнопка в модальном окне
-                    this.events.emit('modalPreview:submit', { cardId: this._id }) 
+                    this.events.emit('modalPreview:submit', { cardId: this._id })
                 } else if (this.cardButton && !this._description) {  // Кнопка удалить в корзине
-                    this.events.emit('basketCard: delete',{ cardId: this._id }) 
+                    this.events.emit('basketCard: delete', { cardId: this._id })
                 }
             })
         }
@@ -76,9 +76,9 @@ export class Card extends Component<ICard> {
         this._category.textContent = categoryName
         this.setColorCategory(categoryName)
     }
-    
+
     // Категории по цветам
-    protected setColorCategory(categoryName: string): void { 
+    protected setColorCategory(categoryName: string): void {
         const colorsCategory: { [key: string]: string } = {
             "софт-скил": "soft",
             "хард-скил": "hard",
@@ -118,5 +118,4 @@ export class Card extends Component<ICard> {
         Object.assign(this, obj)
         return this.cardElement
     }
-
 }

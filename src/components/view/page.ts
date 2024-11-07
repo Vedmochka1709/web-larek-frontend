@@ -19,19 +19,19 @@ export class Page extends Component<IPage> {
 
         this._iconButtonBasket.addEventListener('click', () => this.events.emit('basket:open'))
     }
-    
+
     // Отображение счётчика на иконке корзины
     set counterBasket(value: number) {
         this.setText(this._counterBasket, value)
     }
-    
+
     // Получаем карточки
-    set gallery (cards: HTMLElement[]) {
+    set gallery(cards: HTMLElement[]) {
         this._galleryContainer.replaceChildren(...cards)
     }
 
     // Снятие скролла при открытии модального окна
-    blockPageScroll (value: boolean) {
+    blockPageScroll(value: boolean) {
         this.toggleClass(this.pageContainer, 'page__wrapper_locked', value);
     }
 }

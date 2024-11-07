@@ -28,7 +28,6 @@ const templateSuccess = ensureElement<HTMLTemplateElement>('#success')
 
 // Находим контейнеры
 const pageContainer = ensureElement<HTMLElement>('.page')
-const galleryContainer = ensureElement<HTMLElement>('.gallery')    // TODO:
 const modalContainer = ensureElement<HTMLElement>('#modal-container')
 
 // Создаём экземпляры классов
@@ -40,7 +39,6 @@ const cardData = new CardData(events);
 const basketData = new BasketData(events)
 const orderData = new OrderData(events);
 
-const card = new Card(templateCardCatalog, events); // дубль удалить TODO:
 const page = new Page(pageContainer, events)
 const modal = new Modal(modalContainer, events)
 const basket = new Basket(templateBasket, events)
@@ -73,7 +71,7 @@ events.on('modalPreview:open', (data: { cardId: string }) => {
     const selectedCard = cardData.getCard(data.cardId)
     const cardPreview = new Card(templateCardPreview, events)
 
-    cardData.setCard(data.cardId)
+    cardData.setSelectedCard(data.cardId)
 
     if (!cardInBasket) {
         cardPreview.changeTextButton(false)

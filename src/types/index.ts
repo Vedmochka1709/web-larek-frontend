@@ -1,23 +1,32 @@
 export interface ICard {
-    id: string,
-    description: string,
-    image: string,
-    title: string,
-    category: string,
-    price: number
-    index?: number
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: string;
+    price: number;
+    index?: number;
+}
+
+export interface IOrder {                 
+    payment: string;                     
+    email: string;                        
+    phone: string;
+    address: string;
 }
 
 export interface IBasket {
-    items: HTMLElement[]
-    total: number
+    items: HTMLElement[];
+    total: number;
 }
 
-export interface IOrder {                 // возвращается {
-    payment: string,                      // "id": "28c57cb4-3002-4445-8aa1-2a06a5055ae5",
-    email: string,                        //  "total": 2200}
-    phone: string,
-    address: string
+export interface IPage {
+    gallery: HTMLElement[];
+    counterBasket: number;
+}
+
+export interface IModal {
+    modalContent: HTMLElement;
 }
 
 export interface IForm extends IOrder {
@@ -26,27 +35,28 @@ export interface IForm extends IOrder {
 }
 
 export interface ICardData {
-    cards: ICard[],  
-    setSelectedCard(cardId:string): void,
-    getSelectedCard(): void,
-    getCard(cardId:string): ICard
-}
-
-export interface IBasketData {
-    cardsBasket: ICard[],
-    contains(id: string): boolean,
-    add(card: ICard): void,
-    remove(id: string): void,
-    getBasketList(): void,
-    getLengthBasketList():number,
-    getIdBasketList(): string[],
-    clear(): void
+    cards: ICard[];
+    getCard(cardId:string): ICard;
+    setSelectedCard(cardId:string): void;
+    getSelectedCard(): void;
 }
 
 export interface IOrderData {
     getOrder(): IOrder;
     setField(field: keyof IOrder, value: string): void;
-    setErrors(): Partial<IOrder>;
+    setErrors(): TOrderError;
+    clear(): void;
+}
+
+export interface IBasketData {
+    cardsBasket: ICard[];
+    getTotal(): number;
+    contains(id: string): boolean;
+    add(card: ICard): void;
+    remove(id: string): void;
+    getBasketList(): void;
+    getLengthBasketList():number;
+    getIdBasketList(): string[];
     clear(): void;
 }
 
@@ -61,23 +71,15 @@ export type ApiListResponse = {
     items: ICard[]
 };
 
-export interface IPage {
-    gallery: HTMLElement[]
-    counterBasket: number
-    blockPageScroll (): boolean
-}
-
 //Pick<> - даёт возможность использовать часть типов
-
-export type TCatalogCard = Pick<ICard, 'id'|'category'|'image'|'title'|'price'>
 
 export type TBasketCard = Pick<ICard & {index: number}, 'index'|'id'|'price'|'title'>
 
-export type TOrderError = Partial<Pick<IOrder, 'address' | 'email' | 'payment' | 'phone'>>
+export type TOrderError = Partial<Pick<IOrder, 'address' | 'email' | 'payment' | 'phone'>> 
 
-export type TPayment = Pick<IOrder, 'payment'|'address'>
+export type TPayment = Pick<IOrder, 'payment'|'address'> 
 
-export type TProfileBuyer = Pick<IOrder, 'email'|'phone'>
+export type TProfileBuyer = Pick<IOrder, 'email'|'phone'> 
 
 export type TSuccess = Pick<IBasket, 'total'>
 

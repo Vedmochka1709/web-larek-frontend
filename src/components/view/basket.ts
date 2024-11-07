@@ -24,9 +24,7 @@ export class Basket extends Component<IBasket> {
         this.basketOrderButton.addEventListener('click', () => {
             this.events.emit('basket:submit') // при этом закрывается корзина и открывается окно order
         });
-
     }
-
 
     // Получение общей суммы
     set total(value: number) {
@@ -48,7 +46,4 @@ export class Basket extends Component<IBasket> {
         Object.assign(this as object, data ?? {});
         return this.basketElement;
     }
-
-
-    /*checkValidation (): boolean  // TODO: проверяет форму на валидность    */
 }

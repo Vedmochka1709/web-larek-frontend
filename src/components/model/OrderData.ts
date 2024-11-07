@@ -1,7 +1,7 @@
 import { IOrder, IOrderData, TOrderError } from "../../types";
 import { IEvents } from "../base/events";
 
-export class OrderData implements IOrderData { //TODO: заполнить интерфейс методами
+export class OrderData implements IOrderData {
     protected _order: IOrder = {
         payment: '',
         email: '',
@@ -15,7 +15,6 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
     getOrder() {
         const order = { ...this._order }
         return Object.freeze(order);
-
     }
 
     // Поля формы
@@ -25,7 +24,7 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
     }
 
     // Валидация заказа
-    setErrors() {
+    setErrors():TOrderError {
         const errors: TOrderError = {};
 
         if (!this._order.payment) {
@@ -46,13 +45,8 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
 
     // очистка заказа
     clear() {
-        /* (Object.keys(this._order) as (keyof typeof this._order)[])
-             .forEach(key => { this._order[key] = '' });*/
-
-        this._order.payment = '';
-        this._order.email = '';
-        this._order.phone = '';
-        this._order.address = '';
+         (Object.keys(this._order) as (keyof typeof this._order)[])
+             .forEach(key => { this._order[key] = '' });
 
         this.events.emit('order:changed')
     }

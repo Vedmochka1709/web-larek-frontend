@@ -7,12 +7,12 @@ export class BasketData implements IBasketData {
 
     constructor(protected events: IEvents) { }
 
-    get cardsBasket () {
+    get cardsBasket() {
         return this._cardsBasket
     }
 
     // Получаем общую сумму корзины
-    getTotal():number {
+    getTotal(): number {
         if (!this._cardsBasket.length) return 0;
         return this._cardsBasket.map((item) => item.price).reduce((a, b) => a + b);
     }
@@ -51,7 +51,7 @@ export class BasketData implements IBasketData {
     }
 
     // Возвращает длину массива заказа
-    getLengthBasketList():number {
+    getLengthBasketList(): number {
         return this._cardsBasket.length ?? 0;
     }
 
@@ -59,7 +59,7 @@ export class BasketData implements IBasketData {
     getIdBasketList(): string[] {
         return this._cardsBasket.map(card => card.id);
     }
-    
+
     // Очистка корзины
     clear(): void {
         this._cardsBasket = [];

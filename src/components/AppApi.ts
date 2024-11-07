@@ -1,4 +1,4 @@
-import { ApiListResponse, IApi, ICard, IOrder, TDataOrder, TSuccess } from "../types"
+import { ApiListResponse, IApi, ICard, TDataOrder, TSuccess } from "../types"
 
 export class AppApi {
     private _baseApi: IApi
