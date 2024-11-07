@@ -82,4 +82,6 @@ export type TProfileBuyer = Pick<IOrder, 'email'|'phone'>
 
 export type TSuccess = Pick<IBasket, 'total'>
 
+export type TDataOrder = Partial<IOrder & IBasketData>
+
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';

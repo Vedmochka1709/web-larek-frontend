@@ -14,7 +14,8 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
     // Получаем значение заказа
     getOrder() {                                               // возвращается {
         const order = { ...this._order }                       // "id": "28c57cb4-3002-4445-8aa1-2a06a5055ae5",
-        return Object.freeze(order);                           //  "total": 2200}  
+        return Object.freeze(order);                           //  "total": 2200} 
+       //return  order
     }
 
     // Поля формы

@@ -10,6 +10,7 @@ import { Contacts } from './components/view/Contacts';
 import { Modal } from './components/view/Modal';
 import { Page } from './components/view/Page';
 import { Payment } from './components/view/Payment';
+import { Success } from './components/view/Success';
 import './scss/styles.scss';
 import { IApi, IOrder } from './types/index';
 import { API_URL, settings } from './utils/constants';
@@ -45,6 +46,7 @@ const modal = new Modal(modalContainer, events)
 const basket = new Basket(templateBasket, events)
 const paymentOrder = new Payment(cloneTemplate(templatePayment), events)
 const contacts = new Contacts(cloneTemplate(templateContacts), events)
+const success = new Success (cloneTemplate(templateSuccess), events)
 
 events.onAll((event) => {
     console.log(event.eventName, event.data);
@@ -63,7 +65,7 @@ api.getCards()
                 })
             })
         })
-    }).catch(console.error)
+    }).catch( err => console.error(err))
 
 // Модального окно Preview
 events.on('modalPreview:open', (data: { cardId: string }) => {
@@ -155,7 +157,6 @@ events.on('basketCard: delete', (data: { cardId: string }) => {
 })
 
 // Модальное окно Payment - открытие
-
 events.on('basket:submit', () => {
 
     const payment = orderData.setErrors().payment;
@@ -222,9 +223,35 @@ function getErrorMessage(errors: Partial<IOrder>): string {
     return Object.values(errors).filter(i => !!i).join(' и ');
 }
 
+// Модальное окно Success - открытие
+events.on('contacts:submit', () => {
+
+    const orderAll = {
+        ...orderData.getOrder(), 
+        total: basketData.total, 
+        items: basketData.cardsBasket
+    };
+
+    console.log(orderAll)
+    api.postOrderAll(orderAll)
+        .then(result => {
+            modal.render({
+                modalContent: success.render({
+                    total: result.total
+                })
+            })
+            basketData.clear()
+           // TODO: очистка полей... orderData
+        }).catch( err => console.error(err))
+
+    modal.openModal()
+})
+
+
+
+
 
 // Закрепление модального окна
-
 events.on('modal:open', () => {
     page.blockPageScroll(true)
 })

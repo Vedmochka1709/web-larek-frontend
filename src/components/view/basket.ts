@@ -6,7 +6,7 @@ import { IEvents } from "../base/events";
 export class Basket extends Component<IBasket> {
 
     protected basketElement: HTMLElement;
-    protected basketListConteiner: HTMLElement;
+    protected basketListContainer: HTMLElement;
     protected basketOrderButton: HTMLButtonElement;
     protected totalSum: HTMLElement;
     protected basketItemIndex: HTMLSpanElement;
@@ -16,7 +16,7 @@ export class Basket extends Component<IBasket> {
 
         this.basketElement = cloneTemplate(template)
 
-        this.basketListConteiner = ensureElement('.basket__list', this.basketElement);
+        this.basketListContainer = ensureElement('.basket__list', this.basketElement);
         this.basketOrderButton = ensureElement('.basket__button', this.basketElement) as HTMLButtonElement;
         this.totalSum = ensureElement('.basket__price', this.basketElement);
         this.basketItemIndex = this.basketElement.querySelector('.basket__item-index');
@@ -42,7 +42,7 @@ export class Basket extends Component<IBasket> {
 
     // Заполнение контентом
     set items(cards: HTMLElement[]) {
-        this.basketListConteiner.replaceChildren(...cards)
+        this.basketListContainer.replaceChildren(...cards)
     }
 
     render(data?: IBasket): HTMLElement {

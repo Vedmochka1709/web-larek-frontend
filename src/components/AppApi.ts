@@ -1,5 +1,4 @@
-import { ApiListResponse, IApi, ICard } from "../types"
-import { Api } from "./base/api"
+import { ApiListResponse, IApi, ICard, IOrder, TDataOrder, TSuccess } from "../types"
 
 export class AppApi {
     private _baseApi: IApi
@@ -17,15 +16,9 @@ export class AppApi {
                 })))
     }
 
-
-    // TODO: Отправка выбранной карточки в корзину addCardBasket(cardId: string):Promise<ICard[]> {return this._baseApi.post<ICard[]>(`/order`, data, 'PATCH').then((res: ICard[]) => res)}
-    // TODO: Получение массива выбранных карточек getCardBasket():Promise<ICard[]> {return this._baseApi.get<ICard[]>(`/order`).then((items: ICard[]) => items)}
-    // Удаление карточки deleteCardBasket(cardId: string):Promise<ICard[]> {return this._baseApi.post<ICard[]>(`/order`, {}, 'DELETE').then((res: ICard[]) => res)}
-
-    // Отправка способа оплаты
-    // Отправка электронной почты
-    // Отправка адреса
-    // Отправка номера телефона
-
-
+    postOrderAll (data: TDataOrder): Promise<TSuccess> {
+        console.log(data)
+        return this._baseApi.post('/order', data, 'POST')
+        .then((result: TSuccess) => result);
+    }
 }
