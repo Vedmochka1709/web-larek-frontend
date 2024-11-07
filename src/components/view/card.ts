@@ -72,18 +72,28 @@ export class Card extends Component<ICard> {
         }
     }
 
-    set category(category: string) {
-        this._category.textContent = category
-        // TODO: добавить разделение по цветам this.setColor(category)
+    set category(categoryName: string) {
+        this._category.textContent = categoryName
+        this.setColorCategory(categoryName)
     }
-    /* protected setColor(category: string): void {
-        const color = (Object.keys(CategoryColor) as (keyof typeof CategoryColor)[])
-            .find(key => {
-                return CategoryColor[key] === category
-            });
+    
+    // Категории по цветам
+    protected setColorCategory(categoryName: string): void { 
+        const colorsCategory: { [key: string]: string } = {
+            "софт-скил": "soft",
+            "хард-скил": "hard",
+            "другое": "other",
+            "дополнительное": "additional",
+            "кнопка": "button"
+        }
 
-        this.toggleClass(this._cardCategory, `card__category_${color}`, true);
-    } */
+        const keys = (Object.keys(colorsCategory))
+        keys.forEach((key) => {
+            if (key === categoryName) {
+                this._category.classList.add(`card__category_${colorsCategory[key]}`)
+            }
+        })
+    }
 
     set image(link: string) {
         this.setImage(this._image, `${CDN_URL}${link}`, `${link}`)

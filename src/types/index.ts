@@ -34,7 +34,6 @@ export interface ICardData {
 
 export interface IBasketData {
     cardsBasket: ICard[],
-    total: number,
     contains(id: string): boolean,
     add(card: ICard): void,
     remove(id: string): void,

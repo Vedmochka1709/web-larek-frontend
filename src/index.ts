@@ -46,7 +46,7 @@ const modal = new Modal(modalContainer, events)
 const basket = new Basket(templateBasket, events)
 const paymentOrder = new Payment(cloneTemplate(templatePayment), events)
 const contacts = new Contacts(cloneTemplate(templateContacts), events)
-const success = new Success (cloneTemplate(templateSuccess), events)
+const success = new Success(cloneTemplate(templateSuccess), events)
 
 events.onAll((event) => {
     console.log(event.eventName, event.data);
@@ -65,7 +65,7 @@ api.getCards()
                 })
             })
         })
-    }).catch( err => console.error(err))
+    }).catch(err => console.error(err))
 
 // Модального окно Preview
 events.on('modalPreview:open', (data: { cardId: string }) => {
@@ -115,7 +115,7 @@ events.on('modalPreview:submit', (data: { cardId: string }) => {
 events.on('basket:open', () => {
     modal.render({
         modalContent: basket.render({
-            total: basketData.total,
+            total: basketData.getTotal(),
             items: basketData.getBasketList().map((item) => {
                 const cardBasket = new Card(templateCardBasket, events)
 
@@ -134,7 +134,7 @@ events.on('basket:open', () => {
 
 events.on('basket:changed', () => {
     basket.render({
-        total: basketData.total,
+        total: basketData.getTotal(),
         items: basketData.getBasketList().map((item) => {
             const cardBasket = new Card(templateCardBasket, events)
 
@@ -199,10 +199,7 @@ events.on('form:change', (data: { field: keyof IOrder, value: string }) => {
 
 // Обновление форм
 events.on('order:changed', () => {
-    const payment = orderData.setErrors().payment;
-    const address = orderData.setErrors().address;
-    const email = orderData.setErrors().email;
-    const phone = orderData.setErrors().phone;
+    const { payment, address, email, phone } = orderData.setErrors()
 
     paymentOrder.render({
         payment: orderData.getOrder().payment,
@@ -227,29 +224,29 @@ function getErrorMessage(errors: Partial<IOrder>): string {
 events.on('contacts:submit', () => {
 
     const orderAll = {
-        ...orderData.getOrder(), 
-        total: basketData.total, 
-        items: basketData.cardsBasket
+        ...orderData.getOrder(),
+        total: basketData.getTotal(),
+        items: basketData.getIdBasketList()
     };
 
-    console.log(orderAll)
     api.postOrderAll(orderAll)
         .then(result => {
+            console.log(result)
             modal.render({
                 modalContent: success.render({
                     total: result.total
                 })
             })
             basketData.clear()
-           // TODO: очистка полей... orderData
-        }).catch( err => console.error(err))
-
-    modal.openModal()
+            orderData.clear()
+            modal.openModal()
+        }).catch(err => console.error(err))
 })
 
-
-
-
+// Модальное окно Success - закрытие
+events.on('success:close', () => {
+    modal.closeModal()
+})
 
 // Закрепление модального окна
 events.on('modal:open', () => {

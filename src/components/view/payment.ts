@@ -1,5 +1,5 @@
 import { IForm } from "../../types";
-import { cloneTemplate, ensureAllElements, ensureElement } from "../../utils/utils";
+import { ensureAllElements, ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
 import { Form } from "./Form";
 
@@ -32,7 +32,7 @@ export class Payment extends Form<IForm> {
     }
 
     set address(value: string) {
-        this.setText(this.addressDelivery, value)
+        this.addressDelivery.value = value
     }
 }
 

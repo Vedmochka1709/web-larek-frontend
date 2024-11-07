@@ -12,7 +12,7 @@ export class BasketData implements IBasketData {
     }
 
     // Получаем общую сумму корзины
-    get total():number {
+    getTotal():number {
         if (!this._cardsBasket.length) return 0;
         return this._cardsBasket.map((item) => item.price).reduce((a, b) => a + b);
     }

@@ -16,12 +16,12 @@ export class Contacts extends Form<IForm> {
 
     // Сеттер для отображения почты
     set email(value: string) {
-        this.setText(this.emailUser, value)
+        this.emailUser.value = value
     }
 
     // Сеттер для отображения Адреса
     set phone(value: string) {
-        this.setText(this.phoneUser, value)
+        this.phoneUser.value = value
     }
 }
 

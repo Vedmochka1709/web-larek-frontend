@@ -35,7 +35,3 @@ export class CardData implements ICardData {
         return this.cards.find(card => card.id === this._selectedCardId)!;
     }
 }
-/**- `cards:changed` - изменение массива карточек
-- `counterOrder:changed` - изменение количества карточек в корзине
-- `card:selected` - изменение открываемой в модальном окне картинки карточки
-- `card:previewClear` - необходима очистка данных выбранной для показа в модальном окне карточки */

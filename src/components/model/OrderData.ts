@@ -8,14 +8,14 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
         phone: '',
         address: ''
     }
-    
-    constructor(protected events: IEvents) {}    
+
+    constructor(protected events: IEvents) { }
 
     // Получаем значение заказа
-    getOrder() {                                               // возвращается {
-        const order = { ...this._order }                       // "id": "28c57cb4-3002-4445-8aa1-2a06a5055ae5",
-        return Object.freeze(order);                           //  "total": 2200} 
-       //return  order
+    getOrder() {
+        const order = { ...this._order }
+        return Object.freeze(order);
+
     }
 
     // Поля формы
@@ -42,13 +42,18 @@ export class OrderData implements IOrderData { //TODO: заполнить инт
         }
 
         return errors;
-    } 
+    }
 
-    // очистка заказа TODO:
+    // очистка заказа
     clear() {
-        /*(Object.keys(this._order) as (keyof typeof this._order)[])
-            .forEach(key => { this._order[key] = '' });
+        /* (Object.keys(this._order) as (keyof typeof this._order)[])
+             .forEach(key => { this._order[key] = '' });*/
 
-        this.events.emit('order:changed')*/
+        this._order.payment = '';
+        this._order.email = '';
+        this._order.phone = '';
+        this._order.address = '';
+
+        this.events.emit('order:changed')
     }
 }

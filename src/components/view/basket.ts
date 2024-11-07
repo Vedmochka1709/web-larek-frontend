@@ -37,7 +37,6 @@ export class Basket extends Component<IBasket> {
             this.setText(this.totalSum, `0 синапсов`)
             this.basketOrderButton.disabled = true
         }
-        this.events.emit('basket:submit')
     }
 
     // Заполнение контентом
