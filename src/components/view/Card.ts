@@ -52,28 +52,28 @@ export class Card extends Component<ICard> {
     }
 
     set title(title: string) {
-        this._title.textContent = title
+        this.setText( this._title, title)
     }
 
     set price(price: number) {
         if (price === null) {
-            this._price.textContent = 'Бесценно'
+            this.setText(this._price, 'Бесценно')
             if (this.cardButton) {
-                this.cardButton.disabled = true
+                this.setDisabled( this.cardButton, true)
             }
         } else {
-            this._price.textContent = `${price.toString()} синапсов`
+            this.setText(this._price, `${price.toString()} синапсов`)
         }
     }
 
     set description(description: string) {
         if (this._description) {
-            this._description.textContent = description
+            this.setText( this._description, description)
         }
     }
 
     set category(categoryName: string) {
-        this._category.textContent = categoryName
+        this.setText( this._category, categoryName)
         this.setColorCategory(categoryName)
     }
 
@@ -90,7 +90,7 @@ export class Card extends Component<ICard> {
         const keys = (Object.keys(colorsCategory))
         keys.forEach((key) => {
             if (key === categoryName) {
-                this._category.classList.add(`card__category_${colorsCategory[key]}`)
+                this.toggleClass(this._category, `card__category_${colorsCategory[key]}`, true)
             }
         })
     }

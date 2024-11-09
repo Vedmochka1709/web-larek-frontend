@@ -63,7 +63,7 @@ api.getCards()
                 })
             })
         })
-    }).catch(err => console.error(err))
+    }).catch(console.error)
 
 // Модального окно Preview
 events.on('modalPreview:open', (data: { cardId: string }) => {
@@ -238,7 +238,7 @@ events.on('contacts:submit', () => {
             basketData.clear()
             orderData.clear()
             modal.openModal()
-        }).catch(err => console.error(err))
+        }).catch(console.error)
 })
 
 // Модальное окно Success - закрытие

@@ -30,11 +30,15 @@ export class Basket extends Component<IBasket> {
     set total(value: number) {
         if (value) {
             this.setText(this.totalSum, `${value} синапсов`)
-            this.basketOrderButton.disabled = false
+            this.toggleButton(false)
         } else {
             this.setText(this.totalSum, `0 синапсов`)
-            this.basketOrderButton.disabled = true
+            this.toggleButton(true)
         }
+    }
+
+    toggleButton(state: boolean) {
+        this.setDisabled(this.basketOrderButton, state);
     }
 
     // Заполнение контентом

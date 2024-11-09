@@ -29,15 +29,8 @@ export class Modal extends Component<IModal> {
         // Закрытие по кнопке
         this._modalCloseButton.addEventListener('click', () => this.closeModal())
 
-        // Закрытие по оверлею TODO:  исправить модальное окно, чтобы появился оверлей
+        // Закрытие по оверлею 
         this.overlay.addEventListener('click', () => this.closeModal())
-
-        // Закрытие по нажатию Escape
-        document.addEventListener('keydown', (evt) => {
-            if (evt.key === 'Escape') {
-                this.closeModal()
-            }
-        })
     }
 
     // Запоняем контентом
@@ -45,13 +38,26 @@ export class Modal extends Component<IModal> {
         this._modalContent.replaceChildren(content)
     }
 
+    // создаем метод для переключения модального окна
+    toggleModal(state: boolean) {
+        this.toggleClass(this.container, 'modal_active', state);
+    }
+
+    handleEscape = (evt: KeyboardEvent) => {
+        if (evt.key === 'Escape') {
+            this.closeModal();
+        }
+    }
+
     openModal() {
-        this.container.classList.add('modal_active');
+        this.toggleModal(true)
+        document.addEventListener('keydown', this.handleEscape);  // Закрытие по нажатию Escape
         this.events.emit('modal:open')
     }
 
     closeModal() {
-        this.container.classList.remove('modal_active');
+        this.toggleModal(false)
+        document.removeEventListener('keydown', this.handleEscape)
         this.modalContent = null;
         this.events.emit('modal:close')
     }
